@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+{% block article %}      
+        <div class="row narrow section-intro add-bottom text-center">
+            <div class="col-twelve tab-full">
+        <h2 class="add-bottom">Register</h2><br>
+            <form >
+    <body class="s-content col-twelve tab-full">
+        {{ form_start(registrationForm) }}
+        {{ form_row(registrationForm.username) }}
+        {{ form_row(registrationForm.email) }}
+        {{ form_row(registrationForm.password) }}
+        {{ form_row(registrationForm.agreeTerms) }}
+        <button class="btn--primary full-width">Register</button>
+    {{ form_end(registrationForm) }}
+    </body class="s-content">
+    </form>
+                </div>
+                            </div>
+{% endblock %}
+{% endblock %}
+{% block footer %}
+    {% include ("/partials/extras.html.twig") %}
+
+{% endblock %}

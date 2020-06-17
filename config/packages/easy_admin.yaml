@@ -1,0 +1,85 @@
+easy_admin:
+    site_name: 'Admin page'
+    user:
+        display_name: true
+        display_avatar: false
+    design:
+        form_theme:
+            - "@EasyAdmin/form/bootstrap_4.html.twig"
+            - "@FOSCKEditor/Form/ckeditor_widget.html.twig"
+        menu:
+            - { label: 'Articles' }
+            - { entity: 'Articles', label: 'Articles', icon: 'book' }
+            - { entity: 'Categories', label: 'Categories', icon: 'list' }
+            - { entity: 'Tags', label: 'Mots Tags', icon: 'tag' }
+            - { label: 'Users' }
+            - { entity: 'Users', label: 'Users', icon: 'user' }
+            - { entity: 'Comments', label: 'Comments', icon: 'comments'}
+
+    formats:
+        datetime: 'd/m/Y à H:i'
+    entities:
+        Articles:
+            class: App\Entity\Articles
+            list:
+                fields:
+                    - id
+                    - title
+                    - { property: 'featured_image', label: 'Image', type: 'image', base_path: '%app.path.featured_images%' }
+                    - { property: 'created_at', label: 'Created' }
+                    # Les catégories et les mots-clé sont listés ci-dessous
+                    - { property: 'categories', label: 'Categories', type: 'array'}
+                    - { property: 'comments', label: 'Comments', type: 'array'}
+                    - { property: 'tags', label: 'Tags', type: 'array'}
+                sort: ['created_at', 'desc']
+            form:
+                fields:
+                    - title
+                    - { property: 'content', type: 'fos_ckeditor', type_options: { config_name: 'main_config' }}
+                    - { property: 'imageFile', type: 'vich_image', label: 'Image' }
+                    - users
+                    - { property: 'categories', label: 'Categories', type: 'entity', type_options: { class: 'App\Entity\Categories', multiple: true,by_reference: false, attr: { data-widget: 'select2' }}}
+                    - { property: 'tags', label: 'Tags', type: 'entity', type_options: { class: 'App\Entity\Tags', multiple: true,by_reference: false, attr: { data-widget: 'select2' }}}    
+        Comments:
+            class: App\Entity\Comments
+            list:
+                fields:
+                    - content
+                    - username
+                    - { property: 'articles_id', label: 'Article', type: 'array'}
+                sort: ['username', 'asc']
+        Categories:
+            class: App\Entity\Categories
+            list:
+                fields:
+                    - name
+                    - articles
+                sort: ['name', 'asc']
+            form:
+                fields:
+                    - name
+        Tags:
+            class: App\Entity\Tags
+            list:
+                fields:
+                    - tags
+                    - articles
+                sort: ['tags', 'asc']
+            form:
+                fields:
+                    - tags
+        Users:
+            class: App\Entity\Users
+            list:
+                fields:
+                    - id
+                    - username
+                    - email
+                    - {property: 'roles', label: 'Roles', type: json_array}
+                    - account_status
+                    - user_status
+            form:
+                fields:
+                    - username
+                    - email
+                    - {property: 'roles', label: 'Roles', type: choice, type_options: {expanded: true, multiple: true, choices: {'User': 'ROLE_USER', 'Admin': 'ROLE_ADMIN'}}}
